@@ -62,20 +62,12 @@ namespace HomeWork
                     Console.WriteLine($"{item.SongTitle}, {item.ArtistName} - {item.GenreTitle}");
                 }*/
 
-                /*var songsByGenre = db.Genres
-                    .Join(
-                        db.Songs,
-                        g => g.Id,
-                        s => s.GenreId,
-                        (g, s) => new
-                        {
-                            GenreTitle = g.Title,
-                            SongTitle = s.Title
-                        })
-                    .GroupBy(x => x.GenreTitle)
+                var songsByGenre = db.Songs
+                    .Include(s => s.Genre)
+                    .GroupBy(x => x.Genre.Title)
                     .Select(x => new
                     {
-                        GenreTitle = x.Key,
+                        GenreTitle = x.Key == null ? "Without genre" : x.Key,
                         SongsCount = x.Count()
                     })
                     .ToList();
@@ -83,15 +75,15 @@ namespace HomeWork
                 foreach (var item in songsByGenre)
                 {
                     Console.WriteLine($"{item.GenreTitle}: {item.SongsCount}");
-                }*/
+                }
 
-                var maxDateOfBirth = db.Artists.Max(a => a.DateOfBirth);
+                /*var maxDateOfBirth = db.Artists.Max(a => a.DateOfBirth);
                 var oldestSongs = db.Songs.Where(s => s.ReleaseDate < maxDateOfBirth).ToList();
 
                 foreach (var item in oldestSongs)
                 {
                     Console.WriteLine($"{item.Title}");
-                }
+                }*/
 
                 db.SaveChanges();
             }
